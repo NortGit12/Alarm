@@ -12,6 +12,9 @@ class AlarmDetailTableViewController: UITableViewController {
 
     // MARK: - Stored Properties
     
+    @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var nameLabel: UITextField!
+    @IBOutlet weak var enableButton: UIButton!
     
     // MARK: - UITableViewController
     
@@ -72,6 +75,17 @@ class AlarmDetailTableViewController: UITableViewController {
         return true
     }
     */
+    
+    
+    // MARK: - Actions
+    
+    @IBAction func enableButtonTapped(sender: UIButton) {
+    }
+    
+    
+    @IBAction func saveButtonTapped(sender: UIBarButtonItem) {
+    }
+    
 
     /*
     // MARK: - Navigation
