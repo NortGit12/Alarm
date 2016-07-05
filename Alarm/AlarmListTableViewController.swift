@@ -78,14 +78,31 @@ class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDe
     }
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        
+        // How are we getting there?
+        if segue.identifier == "viewExistingAlarmSegue" {
+            
+            // Where are we going?
+            if let alarmDetailTableViewController = segue.destinationViewController as? AlarmDetailTableViewController {
+                
+                // What do we need to pack?
+                if let index = tableView.indexPathForSelectedRow?.row {
+                    
+                    let alarm = AlarmController.sharedController.alarms[index]
+                    
+                    
+                    // Are we finished packing?
+                    alarmDetailTableViewController.alarm = alarm
+                    
+                }
+            }
+        }
     }
-    */
+    
 
 }
