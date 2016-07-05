@@ -16,6 +16,25 @@ class AlarmController {
     
     static let sharedController = AlarmController()
     
+    var mockAlarms: [Alarm] {
+        
+        let wakeUpAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(21600), name: "Wake Up")
+        let leaveForSchoolAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(28800), name: "Leave for School")
+        let lunchAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(43200), name: "Lunchtime")
+        let goToSleepAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(79200), name: "Go to sleep")
+        
+        return [wakeUpAlarm, leaveForSchoolAlarm, lunchAlarm, goToSleepAlarm]
+        
+    }
+    
+    // MARK: - Initializer(s)
+    
+    init() {
+        
+        self.alarms = self.mockAlarms
+        
+    }
+    
     // MARK: - Methods
     
     func addAlarm(fireTimeFromMidnight: NSTimeInterval, name: String) -> Alarm {
