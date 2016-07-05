@@ -72,4 +72,12 @@ class AlarmController {
         
     }
     
+    func toggleEnabled(alarm: Alarm) {
+        
+        switch alarm.enabled {
+        case true: alarm.enabled = false
+        case false: alarm.enabled = true
+        }
+    }
+    
 }

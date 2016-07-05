@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlarmListTableViewController: UITableViewController {
+class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDelegate {
 
     // MARK: - Stored Properties
     
@@ -50,6 +50,31 @@ class AlarmListTableViewController: UITableViewController {
             
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
+    }
+    
+    
+    // MARK: - SwitchTableViewCellDelegate
+    
+    func switchCellSwitchValueChanged(cell: SwitchTableViewCell) {
+        
+        // Capture the alarm
+//        guard let cellIndexPath = tableView.indexPathForCell(cell), fireTimeFromMidnight = cell.timeLabel.text, name = cell.nameLabel.text else {
+//            return
+//        }
+        
+        guard let cellIndexPath = tableView.indexPathForCell(cell) else {
+            return
+        }
+        
+        let alarm = AlarmController.sharedController.alarms[cellIndexPath.row]
+            
+        // Toggle the alarm's enabled property
+        AlarmController.sharedController.toggleEnabled(alarm)
+            
+        // Reload the UITableView
+        tableView.beginUpdates()
+        tableView.reloadRowsAtIndexPaths([cellIndexPath], withRowAnimation: .Automatic)
+        tableView.endUpdates()
     }
     
     
