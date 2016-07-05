@@ -12,6 +12,8 @@ class AlarmDetailTableViewController: UITableViewController {
 
     // MARK: - Stored Properties
     
+    var alarm: Alarm?
+    
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var nameLabel: UITextField!
     @IBOutlet weak var enableButton: UIButton!
@@ -21,7 +23,10 @@ class AlarmDetailTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        if let alarm = alarm {
+            updateWithAlarm(alarm)
+            setupView()
+        }
     }
 
     // MARK: - Table view data source
@@ -75,6 +80,35 @@ class AlarmDetailTableViewController: UITableViewController {
         return true
     }
     */
+    
+    // MARK: - Methods
+    
+    func setupView() {
+        
+        if let alarm = alarm {
+            switch alarm.enabled {
+            case true:
+                enableButton.titleLabel?.text = "Enable"
+                enableButton.backgroundColor = .greenColor()
+            case false:
+                enableButton.titleLabel?.text = "Disable"
+                enableButton.backgroundColor = .redColor()
+            }
+        } else {
+            enableButton.hidden = true
+        }
+    }
+    
+    func updateWithAlarm(alarm: Alarm) {
+        
+        guard let alarmDate = alarm.fireDate else {
+            return
+        }
+        
+        datePicker.date = alarmDate
+        nameLabel.text = alarm.name
+        
+    }
     
     
     // MARK: - Actions
