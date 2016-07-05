@@ -35,5 +35,15 @@ class SwitchTableViewCell: UITableViewCell {
     @IBAction func switchValueChanged(sender: UISwitch) {
     }
     
+    // MARK: - Methods
+    
+    func updateWithAlarm(alarm: Alarm) {
+        
+        timeLabel.text = alarm.fireTimeAsString
+        nameLabel.text = alarm.name
+        alarmSwitch.on = alarm.enabled
+        
+    }
+    
 
 }

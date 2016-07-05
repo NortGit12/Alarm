@@ -23,6 +23,8 @@ class AlarmController {
         let lunchAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(43200), name: "Lunchtime")
         let goToSleepAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(79200), name: "Go to sleep")
         
+        lunchAlarm.enabled = false
+        
         return [wakeUpAlarm, leaveForSchoolAlarm, lunchAlarm, goToSleepAlarm]
         
     }
