@@ -14,14 +14,72 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="SDP-O1-6s6">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="SDP-O1-6s6" customClass="SwitchTableViewCell" customModule="Alarm" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="SDP-O1-6s6" id="ouX-ap-7oH">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f2d-b2-ycD">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YtP-RS-t4a">
+                                                    <rect key="frame" x="0.0" y="0.0" width="525" height="44"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gmH-gZ-NZK">
+                                                            <rect key="frame" x="0.0" y="0.0" width="525" height="27"/>
+                                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFa-ke-lNT">
+                                                            <rect key="frame" x="0.0" y="27" width="525" height="17"/>
+                                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="14"/>
+                                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="500" id="ZTK-se-fVa"/>
+                                                    </constraints>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="ZTK-se-fVa"/>
+                                                        </mask>
+                                                    </variation>
+                                                </stackView>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="otO-37-1Gp">
+                                                    <rect key="frame" x="525" y="0.0" width="77" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="75" id="onX-so-qVd"/>
+                                                    </constraints>
+                                                    <connections>
+                                                        <action selector="switchValueChanged:" destination="SDP-O1-6s6" eventType="valueChanged" id="Uu9-7s-MQE"/>
+                                                    </connections>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="YtP-RS-t4a" firstAttribute="leading" secondItem="f2d-b2-ycD" secondAttribute="leading" id="3eM-k1-Wpb"/>
+                                                <constraint firstAttribute="trailing" secondItem="otO-37-1Gp" secondAttribute="trailing" id="7KR-yf-8jV"/>
+                                                <constraint firstAttribute="bottom" secondItem="YtP-RS-t4a" secondAttribute="bottom" id="9nX-kC-69t"/>
+                                                <constraint firstAttribute="bottom" secondItem="otO-37-1Gp" secondAttribute="bottom" id="Dui-Vv-DdF"/>
+                                                <constraint firstItem="YtP-RS-t4a" firstAttribute="top" secondItem="f2d-b2-ycD" secondAttribute="top" id="T5K-aB-BPR"/>
+                                                <constraint firstItem="otO-37-1Gp" firstAttribute="top" secondItem="f2d-b2-ycD" secondAttribute="top" id="gdC-YQ-fwF"/>
+                                            </constraints>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="f2d-b2-ycD" secondAttribute="trailing" id="0cG-GG-ClL"/>
+                                        <constraint firstItem="f2d-b2-ycD" firstAttribute="leading" secondItem="ouX-ap-7oH" secondAttribute="leading" id="beI-73-D1R"/>
+                                        <constraint firstAttribute="bottom" secondItem="f2d-b2-ycD" secondAttribute="bottom" id="ewf-DM-jVg"/>
+                                        <constraint firstItem="f2d-b2-ycD" firstAttribute="top" secondItem="ouX-ap-7oH" secondAttribute="top" id="kWP-p1-VU0"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="alarmSwitch" destination="otO-37-1Gp" id="bP5-wF-PaS"/>
+                                    <outlet property="nameLabel" destination="IFa-ke-lNT" id="WIB-Ek-t3R"/>
+                                    <outlet property="timeLabel" destination="gmH-gZ-NZK" id="qpt-5c-SBP"/>
                                     <segue destination="tcZ-gZ-ZbM" kind="show" identifier="viewExistingAlarmSegue" id="WPF-8F-xOY"/>
                                 </connections>
                             </tableViewCell>
