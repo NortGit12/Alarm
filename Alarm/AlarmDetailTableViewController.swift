@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlarmDetailTableViewController: UITableViewController {
+class AlarmDetailTableViewController: UITableViewController, AlarmScheduler {
     
     // MARK: - Stored Properties
     
@@ -33,52 +33,6 @@ class AlarmDetailTableViewController: UITableViewController {
         setupView()
     }
     
-    // MARK: - Table view data source
-    
-    /*
-     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-     let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath)
-     
-     // Configure the cell...
-     
-     return cell
-     }
-     */
-    
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-    /*
-     // Override to support editing the table view.
-     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-     if editingStyle == .Delete {
-     // Delete the row from the data source
-     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-     } else if editingStyle == .Insert {
-     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-     }
-     }
-     */
-    
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
     
     // MARK: - Methods
     
@@ -119,9 +73,25 @@ class AlarmDetailTableViewController: UITableViewController {
     @IBAction func enableButtonTapped(sender: UIButton) {
         
         if let alarm = alarm {
+            
+            // Toggle the alarm's enabled property
+            
+            AlarmController.sharedController.toggleEnabled(alarm)
+            
+            /*
+             * Schedule or cancel the alarm, based on what the value will be changed to.
+             * If enabled is the following and then this button is tapped:
+             *      * true  -> change to false and cancel the notification
+             *      * false -> change to true and schedule the notification
+             */
+            
             switch alarm.enabled {
-            case true: alarm.enabled = false
-            case false: alarm.enabled = true
+            case true:
+                alarm.enabled = false
+                cancelLocalNotification(alarm)
+            case false:
+                alarm.enabled = true
+                scheduleLocalNotification(alarm)
             }
             
             setupView()
@@ -150,11 +120,19 @@ class AlarmDetailTableViewController: UITableViewController {
             // Existing alarm
             AlarmController.sharedController.updateAlarm(alarm, fireTimeFromMidnight: fireTimeInterval, name: name, isEnabled: isEnabled)
             
+            // Cancel and reset the Notification
+            cancelLocalNotification(alarm)
+            scheduleLocalNotification(alarm)
             
         } else {
             
             // New alarm
             AlarmController.sharedController.addAlarm(fireTimeInterval, name: name, isEnabled: isEnabled)
+            
+            
+            // Schedule the Notification
+            guard let alarm = AlarmController.sharedController.alarms.last else { return }
+            scheduleLocalNotification(alarm)
             
         }
         

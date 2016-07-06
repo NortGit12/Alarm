@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDelegate {
+class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDelegate, AlarmScheduler {
 
     // MARK: - Stored Properties
     
@@ -50,6 +50,8 @@ class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDe
             let alarm = AlarmController.sharedController.alarms[indexPath.row]
             AlarmController.sharedController.deleteAlarm(alarm)
             
+            cancelLocalNotification(alarm)
+            
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         }
     }
@@ -60,9 +62,6 @@ class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDe
     func switchCellSwitchValueChanged(cell: SwitchTableViewCell) {
         
         // Capture the alarm
-//        guard let cellIndexPath = tableView.indexPathForCell(cell), fireTimeFromMidnight = cell.timeLabel.text, name = cell.nameLabel.text else {
-//            return
-//        }
         
         guard let cellIndexPath = tableView.indexPathForCell(cell) else {
             return
@@ -71,9 +70,23 @@ class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDe
         let alarm = AlarmController.sharedController.alarms[cellIndexPath.row]
             
         // Toggle the alarm's enabled property
+
         AlarmController.sharedController.toggleEnabled(alarm)
+        
+        /*
+         * Schedule or cancel the alarm, based on what the value will be changed to.
+         * If enabled is the following and then this button is tapped:
+         *      * true  -> change to false and cancel the notification
+         *      * false -> change to true and schedule the notification
+         */
+        
+        switch alarm.enabled {
+        case true: cancelLocalNotification(alarm)
+        case false: scheduleLocalNotification(alarm)
+        }
             
         // Reload the UITableView
+        
         tableView.beginUpdates()
         tableView.reloadRowsAtIndexPaths([cellIndexPath], withRowAnimation: .Automatic)
         tableView.endUpdates()

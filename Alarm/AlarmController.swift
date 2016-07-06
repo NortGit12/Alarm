@@ -6,7 +6,52 @@
 //  Copyright © 2016 DevMountain. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+protocol AlarmScheduler {
+    
+    func scheduleLocalNotification(alarm: Alarm)
+    func cancelLocalNotification(alarm: Alarm)
+    
+}
+
+extension AlarmScheduler {
+    
+    func scheduleLocalNotification(alarm: Alarm) {
+        
+        guard let timerTimeInterval = alarm.fireDate?.timeIntervalSinceNow else { return }
+        
+        let localNotification = UILocalNotification()
+        
+        localNotification.category = "alarms_basic"
+        localNotification.alertTitle = "Title: Alarm"
+        localNotification.alertBody = "Body: \(alarm.name)"
+        localNotification.alertAction = "Action: Go to alarm"
+        localNotification.fireDate = NSDate(timeIntervalSinceNow: timerTimeInterval)
+        localNotification.repeatInterval = NSCalendarUnit.Day
+        
+        UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
+        
+    }
+    
+    func cancelLocalNotification(alarm: Alarm) {
+        
+        // Get an array of all of the Notifications
+        guard let localNotifications = UIApplication.sharedApplication().scheduledLocalNotifications else { return }
+        
+        // Get a filtered array of only Alarm Notifications
+        let alarmNotifications = localNotifications.filter( { $0.category == "alarms_basic" } )
+        
+        // Cancel the Alarm Notifications
+        for notification in alarmNotifications {
+            
+            UIApplication.sharedApplication().cancelLocalNotification(notification)
+            
+        }
+        
+    }
+    
+}
 
 class AlarmController {
     
@@ -113,7 +158,7 @@ class AlarmController {
     
     func loadFromPersistentStore() {
         
-        guard let alarmsArray = NSKeyedUnarchiver.unarchiveObjectWithFile(self.filePath(alarmsKey)) as? [Alarm]else { return }
+        guard let alarmsArray = NSKeyedUnarchiver.unarchiveObjectWithFile(self.filePath(alarmsKey)) as? [Alarm] else { return }
         
         alarms = alarmsArray
         
