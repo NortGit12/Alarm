@@ -8,12 +8,26 @@
 
 import Foundation
 
-class Alarm: NSObject {
+class Alarm: NSObject, NSCoding {
     
     var fireTimeFromMidnight: NSTimeInterval
     var name: String
     var enabled: Bool
     let uuid: String
+    
+    private let fireTimeFromMidnightKey = "fireTimeFromMidnightKey"
+    private let nameKey = "nameKey"
+    private let enabledKey = "enabledKey"
+    private let uuidKey = "uuidKey"
+    
+    init(fireTimeFromMidnight: NSTimeInterval, name: String, enabled: Bool, uuid: String = NSUUID().UUIDString) {
+        
+        self.fireTimeFromMidnight = fireTimeFromMidnight
+        self.name = name
+        self.enabled = enabled
+        self.uuid = uuid
+        
+    }
     
     var fireDate: NSDate? {
         guard let thisMorningAtMidnight = DateHelper.thisMorningAtMidnight else {return nil}
@@ -37,11 +51,27 @@ class Alarm: NSObject {
         }
     }
     
-    init(fireTimeFromMidnight: NSTimeInterval, name: String, enabled: Bool = true, uuid: String = NSUUID().UUIDString) {
-        self.fireTimeFromMidnight = fireTimeFromMidnight
-        self.name = name
-        self.enabled = enabled
-        self.uuid = uuid
+    
+    // MARK: - NSCoding
+    
+    required convenience init?(coder aDecoder: NSCoder) {
+        
+        guard let fireTimeFromMidnight = aDecoder.decodeObjectForKey("fireTimeFromMidnightKey") as? NSTimeInterval
+            , name = aDecoder.decodeObjectForKey("nameKey") as? String
+            , enabled = aDecoder.decodeObjectForKey("enabledKey") as? Bool
+            , uuid = aDecoder.decodeObjectForKey("uuidKey") as? String else { return nil }
+        
+        self.init(fireTimeFromMidnight: fireTimeFromMidnight, name: name, enabled: enabled, uuid: uuid)
+        
+    }
+    
+    func encodeWithCoder(aCoder: NSCoder) {
+        
+        aCoder.encodeObject(fireTimeFromMidnight, forKey: fireTimeFromMidnightKey)
+        aCoder.encodeObject(name, forKey: nameKey)
+        aCoder.encodeObject(enabled, forKey: enabledKey)
+        aCoder.encodeObject(uuid, forKey: uuidKey)
+        
     }
 }
 

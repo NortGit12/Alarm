@@ -18,12 +18,10 @@ class AlarmController {
     
     var mockAlarms: [Alarm] {
         
-        let wakeUpAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(21600), name: "Wake Up")
-        let leaveForSchoolAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(28800), name: "Leave for School")
-        let lunchAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(43200), name: "Lunchtime")
-        let goToSleepAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(79200), name: "Go to sleep")
-        
-        lunchAlarm.enabled = false
+        let wakeUpAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(21600), name: "Wake Up", enabled: true)
+        let leaveForSchoolAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(28800), name: "Leave for School", enabled: false)
+        let lunchAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(43200), name: "Lunchtime", enabled: true)
+        let goToSleepAlarm = Alarm(fireTimeFromMidnight: NSTimeInterval(79200), name: "Go to sleep", enabled: false)
         
         return [wakeUpAlarm, leaveForSchoolAlarm, lunchAlarm, goToSleepAlarm]
         
