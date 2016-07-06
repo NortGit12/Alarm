@@ -96,7 +96,11 @@ class AlarmDetailTableViewController: UITableViewController {
                 enableButton.setTitleColor(.whiteColor(), forState: .Normal)
             }
         } else {
-            enableButton.hidden = true
+            
+            enableButton.setTitle(disableString, forState: .Normal)
+            enableButton.backgroundColor = .redColor()
+            enableButton.setTitleColor(.whiteColor(), forState: .Normal)
+            
         }
     }
     
