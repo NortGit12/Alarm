@@ -101,7 +101,10 @@ class AlarmDetailTableViewController: UITableViewController, AlarmScheduler {
     
     @IBAction func saveButtonTapped(sender: UIBarButtonItem) {
         
-        guard let fireTimeInterval = datePicker?.countDownDuration, name = nameTextField?.text else { return }
+        //guard let fireTimeInterval = datePicker?.date.timeIntervalSinceNow, name = nameTextField?.text else { return }
+        guard let name = nameTextField?.text, thisMorningAtMidnight = DateHelper.thisMorningAtMidnight else { return }
+        
+        let timeIntervalSinceMidnight = datePicker.date.timeIntervalSinceDate(thisMorningAtMidnight)
         
         /*
          The logic here seems somewhat backwards.  When the label says "Enable" that means that the alarm
@@ -118,7 +121,7 @@ class AlarmDetailTableViewController: UITableViewController, AlarmScheduler {
         if let alarm = alarm {
             
             // Existing alarm
-            AlarmController.sharedController.updateAlarm(alarm, fireTimeFromMidnight: fireTimeInterval, name: name, isEnabled: isEnabled)
+            AlarmController.sharedController.updateAlarm(alarm, fireTimeFromMidnight: timeIntervalSinceMidnight, name: name, isEnabled: isEnabled)
             
             // Cancel and reset the Notification
             cancelLocalNotification(alarm)
@@ -126,8 +129,11 @@ class AlarmDetailTableViewController: UITableViewController, AlarmScheduler {
             
         } else {
             
+            // Debug shortcircuit
+            //let fireTimeInterval = NSTimeInterval(5)
+            
             // New alarm
-            AlarmController.sharedController.addAlarm(fireTimeInterval, name: name, isEnabled: isEnabled)
+            AlarmController.sharedController.addAlarm(timeIntervalSinceMidnight, name: name, isEnabled: isEnabled)
             
             
             // Schedule the Notification
