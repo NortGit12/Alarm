@@ -12,13 +12,14 @@ class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDe
 
     // MARK: - Stored Properties
     
-    
     // MARK: - UITableViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        tableView.reloadData()
     }
 
     // MARK: - Table view data source
@@ -35,6 +36,7 @@ class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDe
         let alarm = AlarmController.sharedController.alarms[indexPath.row]
         
         cell?.updateWithAlarm(alarm)
+        cell?.delegate = self
 
         return cell ?? UITableViewCell()
     }
@@ -76,7 +78,6 @@ class AlarmListTableViewController: UITableViewController, SwitchTableViewCellDe
         tableView.reloadRowsAtIndexPaths([cellIndexPath], withRowAnimation: .Automatic)
         tableView.endUpdates()
     }
-    
     
     
     // MARK: - Navigation

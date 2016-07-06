@@ -39,10 +39,10 @@ class AlarmController {
     
     // MARK: - Methods
     
-    func addAlarm(fireTimeFromMidnight: NSTimeInterval, name: String) -> Alarm {
+    func addAlarm(fireTimeFromMidnight: NSTimeInterval, name: String, isEnabled: Bool) -> Alarm {
         
         // Create alarm
-        let alarm = Alarm(fireTimeFromMidnight: fireTimeFromMidnight, name: name)
+        let alarm = Alarm(fireTimeFromMidnight: fireTimeFromMidnight, name: name, enabled: isEnabled)
         
         // Add the alarm to the alarms array
         alarms.append(alarm)
@@ -51,7 +51,7 @@ class AlarmController {
         return alarm
     }
     
-    func updateAlarm(alarm: Alarm, fireTimeFromMidnight: NSTimeInterval, name: String) {
+    func updateAlarm(alarm: Alarm, fireTimeFromMidnight: NSTimeInterval, name: String, isEnabled: Bool) {
         
         guard let index = alarms.indexOf(alarm) where name.characters.count > 0 else {
             return
@@ -59,6 +59,7 @@ class AlarmController {
         
         alarms[index].fireTimeFromMidnight = fireTimeFromMidnight
         alarms[index].name = name
+        alarms[index].enabled = isEnabled
         
     }
     
@@ -74,9 +75,12 @@ class AlarmController {
     
     func toggleEnabled(alarm: Alarm) {
         
-        switch alarm.enabled {
-        case true: alarm.enabled = false
-        case false: alarm.enabled = true
+        if let index = alarms.indexOf(alarm) {
+            
+            switch alarm.enabled {
+            case true: alarms[index].enabled = false
+            case false: alarms[index].enabled = true
+            }
         }
     }
     

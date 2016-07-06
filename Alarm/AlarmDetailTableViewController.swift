@@ -14,6 +14,9 @@ class AlarmDetailTableViewController: UITableViewController {
     
     var alarm: Alarm?
     
+    let enableString = "Enable"
+    let disableString = "Disable"
+    
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var enableButton: UIButton!
@@ -84,11 +87,13 @@ class AlarmDetailTableViewController: UITableViewController {
         if let alarm = alarm {
             switch alarm.enabled {
             case true:
-                enableButton.titleLabel?.text = "Enable"
-                enableButton.backgroundColor = .greenColor()
-            case false:
-                enableButton.titleLabel?.text = "Disable"
+                enableButton.setTitle(disableString, forState: .Normal)
                 enableButton.backgroundColor = .redColor()
+                enableButton.setTitleColor(.whiteColor(), forState: .Normal)
+            case false:
+                enableButton.setTitle(enableString, forState: .Normal)
+                enableButton.backgroundColor = .greenColor()
+                enableButton.setTitleColor(.whiteColor(), forState: .Normal)
             }
         } else {
             enableButton.hidden = true
@@ -97,14 +102,7 @@ class AlarmDetailTableViewController: UITableViewController {
     
     func updateWithAlarm(alarm: Alarm) {
         
-        let alarmDate = alarm.fireDate
-        
-        guard let alarmFireDate = alarm.fireDate else {
-            print("Inside the else")
-            return
-        }
-        
-        print("After the else")
+        guard let alarmFireDate = alarm.fireDate else { return }
         
         datePicker.date = alarmFireDate
         nameTextField.text = alarm.name
@@ -115,10 +113,49 @@ class AlarmDetailTableViewController: UITableViewController {
     // MARK: - Actions
     
     @IBAction func enableButtonTapped(sender: UIButton) {
+        
+        if let alarm = alarm {
+            switch alarm.enabled {
+            case true: alarm.enabled = false
+            case false: alarm.enabled = true
+            }
+            
+            setupView()
+        }
     }
     
     
     @IBAction func saveButtonTapped(sender: UIBarButtonItem) {
+        
+        guard let fireTimeInterval = datePicker?.countDownDuration, name = nameTextField?.text else { return }
+        
+        /*
+         The logic here seems somewhat backwards.  When the label says "Enable" that means that the alarm
+         is disabled and you can enable it and when the label says "Disable" that means that the alarm is
+         enabled and you can disable it.
+         */
+        var isEnabled = false
+        if enableButton.titleLabel?.text == enableString {
+            isEnabled = false
+        } else {
+            isEnabled = true
+        }
+        
+        if let alarm = alarm {
+            
+            // Existing alarm
+            AlarmController.sharedController.updateAlarm(alarm, fireTimeFromMidnight: fireTimeInterval, name: name, isEnabled: isEnabled)
+            
+            
+        } else {
+            
+            // New alarm
+            AlarmController.sharedController.addAlarm(fireTimeInterval, name: name, isEnabled: isEnabled)
+            
+        }
+        
+        navigationController?.popViewControllerAnimated(true)
+        
     }
     
     
